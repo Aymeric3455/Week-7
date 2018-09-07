@@ -103,7 +103,20 @@ class Deck
     }
 
     // Public methods:
+    initialiseFromDeckPDO()
+    {
+        let card = new Card();
+        card.initialiseFromCardPDO(cardPDOObject);
+        // Then add the new card instance to the this._cards array
 
+        for (let theSuit = 1; theSuit <= 4; theSuit++)
+        {
+            for (let theValue = 1; theValue <= 13; theValue++)
+            {
+                this._cards.push(new Card(theValue, theSuit));
+            }
+        }
+    }
     toString()
     {
         let output = "";
@@ -165,9 +178,10 @@ function storeDeck()
     if (typeof(Storage) !== "undefined")
     {
         // TODO: Stringify deckInstance to a JSON string
-
+        let deckInstanceSent = JSON.stringify(deckInstance);
+        
         // TODO: store this JSON string to local storage
-        //       using the key STORAGE_KEY.
+        localStorage.setItem('STORAGE_KEY', deckInstanceSent);
 
     }
     else
@@ -179,22 +193,21 @@ function storeDeck()
     deckInstance = null;
 }
 
-
 function retrieveDeck()
 {
     if (typeof(Storage) !== "undefined")
     {
         // TODO: Retrieve the stored JSON string and parse
+        let deckObject = localStorage.getItem('STORAGE_KEY');
         //       to a variable called deckObject.
         //       Use this to initialise an new instance of
         //       the Deck class.
-
+        deckInstance = new Deck(JSON.parse(deckObject));
     }
     else
     {
         console.log("Error: localStorage is not supported by current browser.");
     }
-
 }
 
 
